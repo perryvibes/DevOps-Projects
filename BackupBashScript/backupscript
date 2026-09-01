@@ -29,10 +29,10 @@ if [[ -n $SRCDIR ]]; then
     fi
 
     cd "$DESTDIR" || exit 1
-    
+
+    git checkout master
     git add "$DESTDIR/."
     git commit -m "Adding new items $DATENOW-$TIMENOW"
-    git branch -M master
     git push origin master
 
     if [ $? -eq 0 ]; then 
