@@ -1,0 +1,52 @@
+#!/bin/bash
+
+
+TIMENOW="$(date +'%H:%M:%S')"
+DATENOW="$(date +'%d.%m.%Y')"
+USER="$(whoami)"
+GITREPO="https://github.com/perryvibes/DevOps-Projects.git"
+
+SRCDIR="$(
+    find ~ -type d -name "$1" -not -path "/home/$USER/.local/share/Thrash/*" | head -n 1
+)"
+
+DESTDIR="/home/$USER/Desktop/DevOpsProjects/BackupBashScript/$1 [$DATENOW][$TIMENOW]"
+
+if [[ -z $1 ]]; then
+    echo "[$DATENOW][$TIMENOW] Don't forget to add your directory as argument! ex: bash newscript myphotos"
+    exit 1
+fi
+
+if [[ -n $SRCDIR ]]; then
+    
+    echo "[$DATENOW][$TIMENOW] Found directory $1!"
+    mkdir -p "$DESTDIR"
+    cp -r "$SRCDIR"/. "$DESTDIR"
+    if [ $? -eq 1 ]; then # Checking if copy command went well
+        echo "[$DATENOW][$TIMENOW] ERROR! Cannot copy files from source directory to backup directory"
+    else 
+        echo "[$DATENOW][$TIMENOW] Files copied succesfully!"
+    fi
+
+    # Github commands
+    # Supposed we are logged in with git and also we already set up the repo
+    # git init ...
+    # git branch -M main
+    # git remote add origin $GITREPO
+
+    # cd $DESTDIR || exit 1
+    
+    # git add .
+    # git commit -m "$(read)"
+    # git push origin main
+
+    # if [ $? -eq 1 ]; then 
+    #     echo "[$DATENOW][$TIMENOW] ERROR! Github PUSH failed!"
+    # else
+    #     echo "[$DATENOW][$TIMENOW] Backup PUSHED to Github succesfully!"
+    # fi
+
+else
+    echo "[$DATENOW][$TIMENOW] Directory NOT FOUND! Check for misstyping..."
+fi
+
