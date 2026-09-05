@@ -1,0 +1,40 @@
+services:
+  app:
+    depends_on:
+      - database
+    build:
+      context: .
+    container_name: games-api
+    hostname: games-api-host
+    networks:
+      - games_api_net
+    ports:
+      - ${APP_PORT}
+    env_file:
+      - .env
+
+  database:
+    image: mysql:8.0 # using a stable version
+    container_name: games-db
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - ${DB_PORT}
+    volumes:
+      # Init our database with mysql queries
+      - ./games-db.sql:/docker-entrypoint-initdb.d/games-db.sql
+      - mysqldb:/var/lib/mysql
+    networks:
+      - games_api_net
+
+    # TODO: phpadmin...
+
+volumes:
+  mysqldb:
+
+networks:
+  games_api_net:
+      driver: bridge
