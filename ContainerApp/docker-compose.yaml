@@ -30,7 +30,18 @@ services:
     networks:
       - games_api_net
 
-    # TODO: phpadmin...
+  phpadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - ${PHP_ADMIN_PORT}
+    environment:
+      PMA_HOST: database
+      PMA_ARBITRARY: 1
+    depends_on:
+      - database
+    networks:
+      - games_api_net
 
 volumes:
   mysqldb:
